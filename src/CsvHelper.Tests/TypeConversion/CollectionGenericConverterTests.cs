@@ -26,8 +26,9 @@ namespace CsvHelper.Tests.TypeConversion
 			var rowMock = new Mock<ICsvReaderRow>();
 			var currentRecord = new[] { "1", "one", "1", "2", "3" };
 			rowMock.Setup( m => m.Configuration ).Returns( config );
-			rowMock.Setup( m => m.CurrentRecord ).Returns( currentRecord );
+			rowMock.Setup( m => m.Context ).Returns( new CsvReadingContext( new StringReader( string.Empty ), config, false ) );
 			rowMock.Setup( m => m.GetField( It.IsAny<Type>(), It.IsAny<int>() ) ).Returns<Type, int>( ( type, index ) => Convert.ToInt32( currentRecord[index] ) );
+			rowMock.Object.Context.Record = currentRecord;
 			var data = new CsvPropertyMapData( typeof( Test ).GetTypeInfo().GetProperty( "List" ) )
 			{
 				Index = 2
@@ -50,8 +51,9 @@ namespace CsvHelper.Tests.TypeConversion
 			var rowMock = new Mock<ICsvReaderRow>();
 			var currentRecord = new[] { "1", "one", "1", "2", "3" };
 			rowMock.Setup( m => m.Configuration ).Returns( config );
-			rowMock.Setup( m => m.CurrentRecord ).Returns( currentRecord );
+			rowMock.Setup( m => m.Context ).Returns( new CsvReadingContext( new StringReader( string.Empty ), config, false ) );
 			rowMock.Setup( m => m.GetField( It.IsAny<Type>(), It.IsAny<int>() ) ).Returns<Type, int>( ( type, index ) => Convert.ToInt32( currentRecord[index] ) );
+			rowMock.Object.Context.Record = currentRecord;
 			var data = new CsvPropertyMapData( typeof( Test ).GetProperty( "List" ) )
 			{
 				Index = 2,

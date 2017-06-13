@@ -2,6 +2,7 @@
 // This file is a part of CsvHelper and is dual licensed under MS-PL and Apache 2.0.
 // See LICENSE.txt for details or visit http://www.opensource.org/licenses/ms-pl.html for MS-PL and http://opensource.org/licenses/Apache-2.0 for Apache 2.0.
 // https://github.com/JoshClose/CsvHelper
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -14,34 +15,25 @@ namespace CsvHelper.Tests.Mocks
 	{
 		private readonly Queue<string[]> rows;
 
-		public void Dispose()
-		{
-		}
+		public CsvReadingContext Context { get; }
 
-		public TextReader TextReader { get; }
-		public ICsvParserConfiguration Configuration { get; private set; }
-		public int FieldCount { get; private set; }
-		public long CharPosition { get; private set; }
-		public long BytePosition { get; private set; }
-		public int Row { get; private set; }
-		public int RawRow { get; private set; }
-		public string RawRecord { get; private set; }
+		public ICsvParserConfiguration Configuration { get; }
 
 		public ParserMock()
 		{
-			Configuration = new CsvConfiguration();
+			Context = new CsvReadingContext( new StringReader( string.Empty ), new CsvConfiguration(), false );
 			rows = new Queue<string[]>();
 		}
 
 		public ParserMock( Queue<string[]> rows )
 		{
-			Configuration = new CsvConfiguration();
+			Context = new CsvReadingContext( new StringReader( string.Empty ), new CsvConfiguration(), false );
 			this.rows = rows;
 		}
 
 		public string[] Read()
 		{
-		    Row++;
+		    Context.Row++;
 			return rows.Dequeue();
 		}
 
@@ -58,6 +50,10 @@ namespace CsvHelper.Tests.Mocks
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
+		}
+
+		public void Dispose()
+		{
 		}
 	}
 }

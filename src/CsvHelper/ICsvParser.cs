@@ -14,40 +14,14 @@ namespace CsvHelper
 	public interface ICsvParser : IDisposable
 	{
 		/// <summary>
-		/// Gets the <see cref="TextReader"/>.
+		/// Gets the reading context.
 		/// </summary>
-		TextReader TextReader { get; }
+		CsvReadingContext Context { get; }
 
 		/// <summary>
 		/// Gets the configuration.
 		/// </summary>
 		ICsvParserConfiguration Configuration { get; }
-
-		/// <summary>
-		/// Gets the character position that the parser is currently on.
-		/// </summary>
-		long CharPosition { get; }
-
-		/// <summary>
-		/// Gets the byte position that the parser is currently on.
-		/// </summary>
-		long BytePosition { get; }
-
-		/// <summary>
-		/// Gets the row of the CSV file that the parser is currently on.
-		/// </summary>
-		int Row { get; }
-
-		/// <summary>
-		/// Gets the row of the CSV file that the parser is currently on.
-		/// This is the actual file row.
-		/// </summary>
-		int RawRow { get; }
-
-		/// <summary>
-		/// Gets the raw row for the current record that was parsed.
-		/// </summary>
-		string RawRecord { get; }
 
 		/// <summary>
 		/// Reads a record from the CSV file.

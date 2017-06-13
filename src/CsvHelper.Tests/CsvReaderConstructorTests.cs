@@ -13,19 +13,6 @@ namespace CsvHelper.Tests
 	public class CsvReaderConstructorTests
 	{
 		[TestMethod]
-		public void InvalidParameterTest()
-		{
-			try
-			{
-				new CsvReader( new TestParser() );
-				Assert.Fail();
-			}
-			catch( CsvConfigurationException )
-			{
-			}
-		}
-
-		[TestMethod]
 		public void EnsureInternalsAreSetupCorrectlyWhenPassingTextReaderTest()
 		{
 			using( var stream = new MemoryStream() )
@@ -65,6 +52,10 @@ namespace CsvHelper.Tests
 
 		private class TestParser : ICsvParser
 		{
+			private CsvReadingContext context;
+
+			public CsvReadingContext Context => context;
+
 			public void Dispose()
 			{
 				throw new NotImplementedException();
@@ -72,7 +63,7 @@ namespace CsvHelper.Tests
 
 			public TextReader TextReader { get; }
 
-			public ICsvParserConfiguration Configuration { get; private set; }
+			public ICsvParserConfiguration Configuration => context.ParserConfiguration;
 
 			public int FieldCount
 			{

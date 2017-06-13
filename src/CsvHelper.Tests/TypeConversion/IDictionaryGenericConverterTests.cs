@@ -29,9 +29,10 @@ namespace CsvHelper.Tests.TypeConversion
 			var headers = new[] { "Id", "Name", "Prop1", "Prop2", "Prop3" };
 			var currentRecord = new[] { "1", "One", "1", "2", "3" };
 			rowMock.Setup( m => m.Configuration ).Returns( config );
-			rowMock.Setup( m => m.FieldHeaders ).Returns( headers );
-			rowMock.Setup( m => m.CurrentRecord ).Returns( currentRecord );
+			rowMock.Setup( m => m.Context ).Returns( new CsvReadingContext( new StringReader( string.Empty ), config, false ) );
 			rowMock.Setup( m => m.GetField( It.IsAny<Type>(), It.IsAny<int>() ) ).Returns<Type, int>( ( type, index ) => Convert.ToInt32( currentRecord[index] ) );
+			rowMock.Object.Context.HeaderRecord = headers;
+			rowMock.Object.Context.Record = currentRecord;
 			var data = new CsvPropertyMapData( typeof( Test ).GetTypeInfo().GetProperty( "Dictionary" ) )
 			{
 				Index = 2
@@ -55,9 +56,10 @@ namespace CsvHelper.Tests.TypeConversion
 			var headers = new[] { "Id", "Name", "Prop1", "Prop2", "Prop3" };
 			var currentRecord = new[] { "1", "One", "1", "2", "3" };
 			rowMock.Setup( m => m.Configuration ).Returns( config );
-			rowMock.Setup( m => m.FieldHeaders ).Returns( headers );
-			rowMock.Setup( m => m.CurrentRecord ).Returns( currentRecord );
+			rowMock.Setup( m => m.Context ).Returns( new CsvReadingContext( new StringReader( string.Empty ), config, false ) );
 			rowMock.Setup( m => m.GetField( It.IsAny<Type>(), It.IsAny<int>() ) ).Returns<Type, int>( ( type, index ) => Convert.ToInt32( currentRecord[index] ) );
+			rowMock.Object.Context.HeaderRecord = headers;
+			rowMock.Object.Context.Record = currentRecord;
 			var data = new CsvPropertyMapData( typeof( Test ).GetProperty( "Dictionary" ) )
 			{
 				Index = 2,
