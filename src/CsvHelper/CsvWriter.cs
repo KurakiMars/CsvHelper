@@ -448,44 +448,6 @@ namespace CsvHelper
 		}
 
 		/// <summary>
-		/// Clears the record cache for the given type. After <see cref="ICsvWriterRow.WriteRecord{T}"/> is called the
-		/// first time, code is dynamically generated based on the <see cref="CsvPropertyMapCollection"/>,
-		/// compiled, and stored for the given type T. If the <see cref="CsvPropertyMapCollection"/>
-		/// changes, <see cref="ICsvWriter.ClearRecordCache{T}"/> needs to be called to update the
-		/// record cache.
-		/// </summary>
-		/// <typeparam name="T">The record type.</typeparam>
-		public virtual void ClearRecordCache<T>()
-		{
-			ClearRecordCache( typeof( T ) );
-		}
-
-		/// <summary>
-		/// Clears the record cache for the given type. After <see cref="ICsvWriterRow.WriteRecord{T}"/> is called the
-		/// first time, code is dynamically generated based on the <see cref="CsvPropertyMapCollection"/>,
-		/// compiled, and stored for the given type T. If the <see cref="CsvPropertyMapCollection"/>
-		/// changes, <see cref="ICsvWriter.ClearRecordCache(System.Type)"/> needs to be called to update the
-		/// record cache.
-		/// </summary>
-		/// <param name="type">The record type.</param>
-		public virtual void ClearRecordCache( Type type )
-		{
-			context.TypeActions.Remove( type );
-		}
-
-		/// <summary>
-		/// Clears the record cache for all types. After <see cref="ICsvWriterRow.WriteRecord{T}"/> is called the
-		/// first time, code is dynamically generated based on the <see cref="CsvPropertyMapCollection"/>,
-		/// compiled, and stored for the given type T. If the <see cref="CsvPropertyMapCollection"/>
-		/// changes, <see cref="ICsvWriter.ClearRecordCache()"/> needs to be called to update the
-		/// record cache.
-		/// </summary>
-		public virtual void ClearRecordCache()
-		{
-			context.TypeActions.Clear();
-		}
-
-		/// <summary>
 		/// Adds the properties/fields from the mapping. This will recursively
 		/// traverse the mapping tree and add all properties/fields for
 		/// reference maps.

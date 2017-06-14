@@ -169,6 +169,28 @@ namespace CsvHelper
 		}
 
 		/// <summary>
+		/// Clears the specified caches.
+		/// </summary>
+		/// <param name="cache">The caches to clear.</param>
+		public void ClearCache( Caches cache )
+		{
+			if( cache.HasFlag( Caches.NamedIndex ) )
+			{
+				NamedIndexCache.Clear();
+			}
+
+			if( cache.HasFlag( Caches.ReadRecord ) )
+			{
+				RecordFuncs.Clear();
+			}
+
+			if( cache.HasFlag( Caches.TypeConverterOptions ) )
+			{
+				TypeConverterOptionsCache.Clear();
+			}
+		}
+
+		/// <summary>
 		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 		/// </summary>
 		/// <filterpriority>2</filterpriority>
