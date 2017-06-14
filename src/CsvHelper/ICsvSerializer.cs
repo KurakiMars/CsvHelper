@@ -14,9 +14,9 @@ namespace CsvHelper
 	public interface ICsvSerializer : IDisposable
 	{
 		/// <summary>
-		/// Gets the <see cref="TextWriter"/>.
+		/// Gets the writing context.
 		/// </summary>
-		TextWriter TextWriter { get; }
+		CsvWritingContext Context { get; }
 
 		/// <summary>
 		/// Gets the configuration.

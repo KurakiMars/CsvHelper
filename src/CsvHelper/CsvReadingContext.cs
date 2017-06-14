@@ -12,7 +12,7 @@ using System.Text;
 namespace CsvHelper
 {
 	/// <summary>
-	/// The current state of reading a CSV file.
+	/// CSV reading state.
 	/// </summary>
 	public class CsvReadingContext : IDisposable
     {
