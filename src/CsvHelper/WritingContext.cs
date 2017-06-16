@@ -13,7 +13,7 @@ namespace CsvHelper
 	/// <summary>
 	/// CSV writing state.
 	/// </summary>
-	public class CsvWritingContext
+	public class WritingContext
     {
 		private bool disposed;
 		private TextWriter writer;
@@ -66,7 +66,7 @@ namespace CsvHelper
 		/// </summary>
 		public virtual bool HasRecordBeenWritten { get; internal set; }
 
-		internal CsvWritingContext( TextWriter writer, CsvConfiguration configuration, bool leaveOpen )
+		internal WritingContext( TextWriter writer, CsvConfiguration configuration, bool leaveOpen )
 		{
 			this.writer = writer ?? throw new ArgumentNullException( nameof( writer ) );
 			this.configuration = configuration ?? throw new ArgumentNullException( nameof( configuration ) );

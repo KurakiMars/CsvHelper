@@ -21,14 +21,14 @@ namespace CsvHelper
 	/// </summary>
 	public class CsvReader : ICsvReader
 	{
-		private CsvReadingContext context;
+		private ReadingContext context;
 		private bool disposed;
 		private ICsvParser parser;
 
 		/// <summary>
 		/// Gets the reading context.
 		/// </summary>
-		public virtual CsvReadingContext Context => context;
+		public virtual ReadingContext Context => context;
 
 		/// <summary>
 		/// Gets the configuration.

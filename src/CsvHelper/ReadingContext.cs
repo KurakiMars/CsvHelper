@@ -14,7 +14,7 @@ namespace CsvHelper
 	/// <summary>
 	/// CSV reading state.
 	/// </summary>
-	public class CsvReadingContext : IDisposable
+	public class ReadingContext : IDisposable
     {
 		private bool disposed;
 		private TextReader reader;
@@ -160,7 +160,7 @@ namespace CsvHelper
 		/// </summary>
 		public virtual int ColumnCount { get; internal set; }
 
-		internal CsvReadingContext( TextReader reader, CsvConfiguration configuration, bool leaveOpen )
+		internal ReadingContext( TextReader reader, CsvConfiguration configuration, bool leaveOpen )
 		{
 			this.reader = reader ?? throw new ArgumentNullException( nameof( reader ) );
 			this.configuration = configuration ?? throw new ArgumentNullException( nameof( configuration ) );

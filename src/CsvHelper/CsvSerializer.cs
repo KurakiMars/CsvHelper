@@ -13,13 +13,13 @@ namespace CsvHelper
 	/// </summary>
 	public class CsvSerializer : ICsvSerializer
 	{
-		private CsvWritingContext context;
+		private WritingContext context;
 		private bool disposed;
 
 		/// <summary>
 		/// Gets the writing context.
 		/// </summary>
-		public virtual CsvWritingContext Context => context;
+		public virtual WritingContext Context => context;
 
 		/// <summary>
 		/// Gets the configuration.
@@ -56,7 +56,7 @@ namespace CsvHelper
 		/// <param name="leaveOpen">true to leave the reader open after the CsvReader object is disposed, otherwise false.</param>
 		public CsvSerializer( TextWriter writer, CsvConfiguration configuration, bool leaveOpen )
 		{
-			context = new CsvWritingContext( writer, configuration, leaveOpen );
+			context = new WritingContext( writer, configuration, leaveOpen );
 		}
 
 		/// <summary>

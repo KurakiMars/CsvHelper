@@ -15,13 +15,13 @@ namespace CsvHelper
 	/// </summary>
 	public class FieldReader : IDisposable
 	{
-		private CsvReadingContext context;
+		private ReadingContext context;
 		private bool disposed;
 
 		/// <summary>
 		/// Gets the reading context.
 		/// </summary>
-		public virtual CsvReadingContext Context => context;
+		public virtual ReadingContext Context => context;
 
 		/// <summary>
 		/// Creates a new <see cref="FieldReader"/> using the given
@@ -41,7 +41,7 @@ namespace CsvHelper
 		/// <param name="leaveOpen">A value indicating if the <see cref="TextReader"/> should be left open when disposing.</param>
 		public FieldReader( TextReader reader, CsvConfiguration configuration, bool leaveOpen )
 		{
-			context = new CsvReadingContext( reader, configuration, leaveOpen );
+			context = new ReadingContext( reader, configuration, leaveOpen );
 		}
 
 		/// <summary>

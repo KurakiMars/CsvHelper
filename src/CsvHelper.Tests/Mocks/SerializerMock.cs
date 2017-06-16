@@ -25,11 +25,11 @@ namespace CsvHelper.Tests.Mocks
 			get { return records; }
 		}
 
-		public CsvWritingContext Context { get; }
+		public WritingContext Context { get; }
 
 		public SerializerMock( bool throwExceptionOnWrite = false )
 		{
-			Context = new CsvWritingContext( new StringWriter(), new CsvConfiguration(), false );
+			Context = new WritingContext( new StringWriter(), new CsvConfiguration(), false );
 			this.throwExceptionOnWrite = throwExceptionOnWrite;
 		}
 

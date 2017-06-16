@@ -52,9 +52,9 @@ namespace CsvHelper.Tests
 
 		private class TestParser : ICsvParser
 		{
-			private CsvReadingContext context;
+			private ReadingContext context;
 
-			public CsvReadingContext Context => context;
+			public ReadingContext Context => context;
 
 			public void Dispose()
 			{

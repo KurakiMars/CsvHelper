@@ -27,14 +27,14 @@ namespace CsvHelper
 	/// </summary>
 	public class CsvWriter : ICsvWriter
 	{
-		private CsvWritingContext context;
+		private WritingContext context;
 		private bool disposed;
 		private ICsvSerializer serializer;
 
 		/// <summary>
 		/// Gets the writing context.
 		/// </summary>
-		public virtual CsvWritingContext Context => context;
+		public virtual WritingContext Context => context;
 
 		/// <summary>
 		/// Gets the configuration.

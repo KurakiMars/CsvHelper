@@ -15,19 +15,19 @@ namespace CsvHelper.Tests.Mocks
 	{
 		private readonly Queue<string[]> rows;
 
-		public CsvReadingContext Context { get; }
+		public ReadingContext Context { get; }
 
 		public ICsvParserConfiguration Configuration { get; }
 
 		public ParserMock()
 		{
-			Context = new CsvReadingContext( new StringReader( string.Empty ), new CsvConfiguration(), false );
+			Context = new ReadingContext( new StringReader( string.Empty ), new CsvConfiguration(), false );
 			rows = new Queue<string[]>();
 		}
 
 		public ParserMock( Queue<string[]> rows )
 		{
-			Context = new CsvReadingContext( new StringReader( string.Empty ), new CsvConfiguration(), false );
+			Context = new ReadingContext( new StringReader( string.Empty ), new CsvConfiguration(), false );
 			this.rows = rows;
 		}
 
