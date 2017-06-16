@@ -68,6 +68,11 @@ namespace CsvHelper
 		public CsvWriter( ICsvSerializer serializer )
 		{
 			this.serializer = serializer ?? throw new ArgumentNullException( nameof( serializer ) );
+			if( !( this.serializer.Context is IWriterContext ) )
+			{
+				throw new InvalidOperationException( "For ICsvSerializer to be used in CsvWriter, ICsvSerializer.Context must also implement IWriterContext." );
+			}
+
 			context = serializer.Context;
 		}
 
