@@ -23,12 +23,17 @@ namespace CsvHelper
 		/// <summary>
 		/// Gets the reading context.
 		/// </summary>
-		public virtual ReadingContext Context => context;
+		public virtual IParserContext Context => context;
 
 		/// <summary>
 		/// Gets the configuration.
 		/// </summary>
 		public virtual ICsvParserConfiguration Configuration => context.ParserConfiguration;
+
+		/// <summary>
+		/// Gets the <see cref="FieldReader"/>.
+		/// </summary>
+		public virtual FieldReader FieldReader => fieldReader;
 
 		/// <summary>
 		/// Creates a new parser using the given <see cref="TextReader" />.
@@ -65,7 +70,12 @@ namespace CsvHelper
 		public CsvParser( FieldReader reader )
 		{
 			fieldReader = reader ?? throw new ArgumentNullException( nameof( reader ) );
-			context = reader.Context;
+			if( !( fieldReader.Context is IParserContext ) )
+			{
+				throw new InvalidOperationException( "For FieldReader to be used in CsvParser, FieldReader.Context must also implement IParserContext." );
+			}
+
+			context = (ReadingContext)reader.Context;
 		}
 
 		/// <summary>

@@ -14,7 +14,7 @@ namespace CsvHelper
 	/// <summary>
 	/// CSV reading state.
 	/// </summary>
-	public class ReadingContext : IDisposable
+	public class ReadingContext : IReaderContext, IParserContext, IFieldReaderContext, IDisposable
     {
 		private bool disposed;
 		private TextReader reader;

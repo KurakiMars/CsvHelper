@@ -16,12 +16,17 @@ namespace CsvHelper
 		/// <summary>
 		/// Gets the reading context.
 		/// </summary>
-		ReadingContext Context { get; }
+		IParserContext Context { get; }
 
 		/// <summary>
 		/// Gets the configuration.
 		/// </summary>
 		ICsvParserConfiguration Configuration { get; }
+
+		/// <summary>
+		/// Gets the <see cref="FieldReader"/>.
+		/// </summary>
+		FieldReader FieldReader { get; }
 
 		/// <summary>
 		/// Reads a record from the CSV file.

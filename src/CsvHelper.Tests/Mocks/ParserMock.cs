@@ -14,26 +14,35 @@ namespace CsvHelper.Tests.Mocks
 	public class ParserMock : ICsvParser, IEnumerable<string[]>
 	{
 		private readonly Queue<string[]> rows;
+		private ReadingContext context;
 
-		public ReadingContext Context { get; }
+		public IParserContext Context => context;
 
 		public ICsvParserConfiguration Configuration { get; }
 
+		public FieldReader FieldReader
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+		}
+
 		public ParserMock()
 		{
-			Context = new ReadingContext( new StringReader( string.Empty ), new CsvConfiguration(), false );
+			context = new ReadingContext( new StringReader( string.Empty ), new CsvConfiguration(), false );
 			rows = new Queue<string[]>();
 		}
 
 		public ParserMock( Queue<string[]> rows )
 		{
-			Context = new ReadingContext( new StringReader( string.Empty ), new CsvConfiguration(), false );
+			context = new ReadingContext( new StringReader( string.Empty ), new CsvConfiguration(), false );
 			this.rows = rows;
 		}
 
 		public string[] Read()
 		{
-		    Context.Row++;
+		    context.Row++;
 			return rows.Dequeue();
 		}
 

@@ -25,14 +25,17 @@ namespace CsvHelper.Tests.TypeConversion
 		public void ConvertNoIndexEndTest()
 		{
 			var config = new CsvConfiguration { HasHeaderRecord = false };
-			var rowMock = new Mock<ICsvReaderRow>();
+			var rowMock = new Mock<ICsvReader>();
 			var headers = new[] { "Id", "Name", "Prop1", "Prop2", "Prop3" };
 			var currentRecord = new[] { "1", "One", "1", "2", "3" };
+			var context = new ReadingContext( new StringReader( string.Empty ), config, false )
+			{
+				HeaderRecord = headers,
+				Record = currentRecord
+			};
 			rowMock.Setup( m => m.Configuration ).Returns( config );
-			rowMock.Setup( m => m.Context ).Returns( new ReadingContext( new StringReader( string.Empty ), config, false ) );
+			rowMock.Setup( m => m.Context ).Returns( context );
 			rowMock.Setup( m => m.GetField( It.IsAny<Type>(), It.IsAny<int>() ) ).Returns<Type, int>( ( type, index ) => Convert.ToInt32( currentRecord[index] ) );
-			rowMock.Object.Context.HeaderRecord = headers;
-			rowMock.Object.Context.Record = currentRecord;
 			var data = new CsvPropertyMapData( typeof( Test ).GetTypeInfo().GetProperty( "Dictionary" ) )
 			{
 				Index = 2
@@ -55,11 +58,14 @@ namespace CsvHelper.Tests.TypeConversion
 			var rowMock = new Mock<ICsvReaderRow>();
 			var headers = new[] { "Id", "Name", "Prop1", "Prop2", "Prop3" };
 			var currentRecord = new[] { "1", "One", "1", "2", "3" };
+			var context = new ReadingContext( new StringReader( string.Empty ), config, false )
+			{
+				HeaderRecord = headers,
+				Record = currentRecord
+			};
 			rowMock.Setup( m => m.Configuration ).Returns( config );
-			rowMock.Setup( m => m.Context ).Returns( new ReadingContext( new StringReader( string.Empty ), config, false ) );
+			rowMock.Setup( m => m.Context ).Returns( context );
 			rowMock.Setup( m => m.GetField( It.IsAny<Type>(), It.IsAny<int>() ) ).Returns<Type, int>( ( type, index ) => Convert.ToInt32( currentRecord[index] ) );
-			rowMock.Object.Context.HeaderRecord = headers;
-			rowMock.Object.Context.Record = currentRecord;
 			var data = new CsvPropertyMapData( typeof( Test ).GetProperty( "Dictionary" ) )
 			{
 				Index = 2,

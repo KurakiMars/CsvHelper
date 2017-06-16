@@ -639,19 +639,19 @@ namespace CsvHelper.Tests
 				stream.Position = 0;
 
 				parser.Read();
-				Assert.AreEqual( 9, parser.Context.CharPosition );
+				Assert.AreEqual( 9, parser.FieldReader.Context.CharPosition );
 
 				parser.Read();
-				Assert.AreEqual( 16, parser.Context.CharPosition );
+				Assert.AreEqual( 16, parser.FieldReader.Context.CharPosition );
 
 				parser.Read();
-				Assert.AreEqual( 19, parser.Context.CharPosition );
+				Assert.AreEqual( 19, parser.FieldReader.Context.CharPosition );
 
 				parser.Read();
-				Assert.AreEqual( 40, parser.Context.CharPosition );
+				Assert.AreEqual( 40, parser.FieldReader.Context.CharPosition );
 
 				parser.Read();
-				Assert.AreEqual( 57, parser.Context.CharPosition );
+				Assert.AreEqual( 57, parser.FieldReader.Context.CharPosition );
 
 				Assert.IsNull( parser.Read() );
 			}
@@ -701,25 +701,25 @@ namespace CsvHelper.Tests
 				Assert.AreEqual( "Name", record[1] );
 
 				stream.Position = 0;
-				stream.Seek( parser.Context.CharPosition, SeekOrigin.Begin );
+				stream.Seek( parser.FieldReader.Context.CharPosition, SeekOrigin.Begin );
 				record = parser.Read();
 				Assert.AreEqual( "1", record[0] );
 				Assert.AreEqual( "one", record[1] );
 
 				stream.Position = 0;
-				stream.Seek( parser.Context.CharPosition, SeekOrigin.Begin );
+				stream.Seek( parser.FieldReader.Context.CharPosition, SeekOrigin.Begin );
 				record = parser.Read();
 				Assert.AreEqual( "", record[0] );
 				Assert.AreEqual( "", record[1] );
 
 				stream.Position = 0;
-				stream.Seek( parser.Context.CharPosition, SeekOrigin.Begin );
+				stream.Seek( parser.FieldReader.Context.CharPosition, SeekOrigin.Begin );
 				record = parser.Read();
 				Assert.AreEqual( "2", record[0] );
 				Assert.AreEqual( "two", record[1] );
 
 				stream.Position = 0;
-				stream.Seek( parser.Context.CharPosition, SeekOrigin.Begin );
+				stream.Seek( parser.FieldReader.Context.CharPosition, SeekOrigin.Begin );
 				record = parser.Read();
 				Assert.AreEqual( "3", record[0] );
 				Assert.AreEqual( "three, four", record[1] );
@@ -918,10 +918,10 @@ namespace CsvHelper.Tests
 				stream.Position = 0;
 
 				parser.Read();
-				Assert.AreEqual( 5, parser.Context.BytePosition );
+				Assert.AreEqual( 5, parser.FieldReader.Context.BytePosition );
 
 				parser.Read();
-				Assert.AreEqual( 10, parser.Context.BytePosition );
+				Assert.AreEqual( 10, parser.FieldReader.Context.BytePosition );
 
 				Assert.IsNull( parser.Read() );
 			}
@@ -942,10 +942,10 @@ namespace CsvHelper.Tests
 				stream.Position = 0;
 
 				parser.Read();
-				Assert.AreEqual( 7, parser.Context.BytePosition );
+				Assert.AreEqual( 7, parser.FieldReader.Context.BytePosition );
 
 				parser.Read();
-				Assert.AreEqual( 14, parser.Context.BytePosition );
+				Assert.AreEqual( 14, parser.FieldReader.Context.BytePosition );
 
 				Assert.IsNull( parser.Read() );
 			}
@@ -966,10 +966,10 @@ namespace CsvHelper.Tests
 				stream.Position = 0;
 
 				parser.Read();
-				Assert.AreEqual( 11, parser.Context.BytePosition );
+				Assert.AreEqual( 11, parser.FieldReader.Context.BytePosition );
 
 				parser.Read();
-				Assert.AreEqual( 18, parser.Context.BytePosition );
+				Assert.AreEqual( 18, parser.FieldReader.Context.BytePosition );
 
 				Assert.IsNull( parser.Read() );
 			}
@@ -990,10 +990,10 @@ namespace CsvHelper.Tests
 				stream.Position = 0;
 
 				parser.Read();
-				Assert.AreEqual( 8, parser.Context.BytePosition );
+				Assert.AreEqual( 8, parser.FieldReader.Context.BytePosition );
 
 				parser.Read();
-				Assert.AreEqual( 19, parser.Context.BytePosition );
+				Assert.AreEqual( 19, parser.FieldReader.Context.BytePosition );
 
 				Assert.IsNull( parser.Read() );
 			}
@@ -1019,10 +1019,10 @@ namespace CsvHelper.Tests
 				stream.Position = 0;
 
 				parser.Read();
-				Assert.AreEqual( 9, parser.Context.BytePosition );
+				Assert.AreEqual( 9, parser.FieldReader.Context.BytePosition );
 
 				parser.Read();
-				Assert.AreEqual( 20, parser.Context.BytePosition );
+				Assert.AreEqual( 20, parser.FieldReader.Context.BytePosition );
 
 				Assert.IsNull( parser.Read() );
 			}
@@ -1048,10 +1048,10 @@ namespace CsvHelper.Tests
 				stream.Position = 0;
 
 				var r1 = parser.Read();
-				Assert.AreEqual( 10, parser.Context.BytePosition );
+				Assert.AreEqual( 10, parser.FieldReader.Context.BytePosition );
 
 				var r2 = parser.Read();
-				Assert.AreEqual( 25, parser.Context.BytePosition );
+				Assert.AreEqual( 25, parser.FieldReader.Context.BytePosition );
 
 				Assert.IsNull( parser.Read() );
 			}
@@ -1076,13 +1076,13 @@ namespace CsvHelper.Tests
 				stream.Position = 0;
 
 				parser.Read();
-				Assert.AreEqual( 10, parser.Context.BytePosition );
+				Assert.AreEqual( 10, parser.FieldReader.Context.BytePosition );
 
 				parser.Read();
-				Assert.AreEqual( 20, parser.Context.BytePosition );
+				Assert.AreEqual( 20, parser.FieldReader.Context.BytePosition );
 
 				parser.Read();
-				Assert.AreEqual( 30, parser.Context.BytePosition );
+				Assert.AreEqual( 30, parser.FieldReader.Context.BytePosition );
 
 				Assert.IsNull( parser.Read() );
 			}
@@ -1135,25 +1135,25 @@ namespace CsvHelper.Tests
 				Assert.AreEqual( "Name", record[1] );
 
 				stream.Position = 0;
-				stream.Seek( parser.Context.BytePosition, SeekOrigin.Begin );
+				stream.Seek( parser.FieldReader.Context.BytePosition, SeekOrigin.Begin );
 				record = parser.Read();
 				Assert.AreEqual( "1", record[0] );
 				Assert.AreEqual( "one", record[1] );
 
 				stream.Position = 0;
-				stream.Seek( parser.Context.BytePosition, SeekOrigin.Begin );
+				stream.Seek( parser.FieldReader.Context.BytePosition, SeekOrigin.Begin );
 				record = parser.Read();
 				Assert.AreEqual( "", record[0] );
 				Assert.AreEqual( "", record[1] );
 
 				stream.Position = 0;
-				stream.Seek( parser.Context.BytePosition, SeekOrigin.Begin );
+				stream.Seek( parser.FieldReader.Context.BytePosition, SeekOrigin.Begin );
 				record = parser.Read();
 				Assert.AreEqual( "2", record[0] );
 				Assert.AreEqual( "two", record[1] );
 
 				stream.Position = 0;
-				stream.Seek( parser.Context.BytePosition, SeekOrigin.Begin );
+				stream.Seek( parser.FieldReader.Context.BytePosition, SeekOrigin.Begin );
 				record = parser.Read();
 				Assert.AreEqual( "3", record[0] );
 				Assert.AreEqual( "three, four", record[1] );
@@ -1249,10 +1249,10 @@ namespace CsvHelper.Tests
 			using( var parser = new CsvParser( reader ) )
 			{
 				parser.Read();
-				Assert.AreEqual( row1, parser.Context.RawRecord );
+				Assert.AreEqual( row1, parser.FieldReader.Context.RawRecord );
 
 				parser.Read();
-				Assert.AreEqual( row2, parser.Context.RawRecord );
+				Assert.AreEqual( row2, parser.FieldReader.Context.RawRecord );
 			}
 		}
 

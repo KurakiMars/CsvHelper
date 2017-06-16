@@ -18,7 +18,7 @@ namespace CsvHelper
 		/// <summary>
 		/// Gets the reading context.
 		/// </summary>
-		ReadingContext Context { get; }
+		IReaderContext Context { get; }
 
 		/// <summary>
 		/// Gets or sets the configuration.

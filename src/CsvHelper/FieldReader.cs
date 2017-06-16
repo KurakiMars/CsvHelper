@@ -21,7 +21,7 @@ namespace CsvHelper
 		/// <summary>
 		/// Gets the reading context.
 		/// </summary>
-		public virtual ReadingContext Context => context;
+		public virtual IFieldReaderContext Context => context;
 
 		/// <summary>
 		/// Creates a new <see cref="FieldReader"/> using the given

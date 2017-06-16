@@ -28,12 +28,12 @@ namespace CsvHelper
 		/// <summary>
 		/// Gets the reading context.
 		/// </summary>
-		public virtual ReadingContext Context => context;
+		public virtual IReaderContext Context => context;
 
 		/// <summary>
 		/// Gets the configuration.
 		/// </summary>
-		public virtual ICsvReaderConfiguration Configuration => Context.ReaderConfiguration;
+		public virtual ICsvReaderConfiguration Configuration => context.ReaderConfiguration;
 
 		/// <summary>
 		/// Gets the parser.
@@ -76,7 +76,12 @@ namespace CsvHelper
 		public CsvReader( ICsvParser parser )
 		{
 			this.parser = parser ?? throw new ArgumentNullException( nameof( parser ) );
-			context = parser.Context;
+			if( !( this.parser.Context is IReaderContext ) )
+			{
+				throw new InvalidOperationException( "For ICsvParser to be used in CsvReader, ICSvParser.Context must also implement IReaderContext." );
+			}
+
+			context = (ReadingContext)parser.Context;
 		}
 
 		/// <summary>
@@ -85,7 +90,7 @@ namespace CsvHelper
 		/// <returns>True if there are more records, otherwise false.</returns>
 		public virtual bool ReadHeader()
 		{
-			if( !Context.ReaderConfiguration.HasHeaderRecord )
+			if( !context.ReaderConfiguration.HasHeaderRecord )
 			{
 				throw new CsvReaderException( "Configuration.HasHeaderRecord is false." );
 			}
@@ -114,16 +119,16 @@ namespace CsvHelper
 			context.CurrentIndex = -1;
 			context.HasBeenRead = true;
 
-			if( Context.ReaderConfiguration.DetectColumnCountChanges && context.Record != null )
+			if( context.ReaderConfiguration.DetectColumnCountChanges && context.Record != null )
 			{
 				if( context.ColumnCount > 0 && context.ColumnCount != context.Record.Length )
 				{
 					var csvException = new CsvBadDataException( "An inconsistent number of columns has been detected." );
 					ExceptionHelper.AddExceptionData( csvException, context.Row, null, context.CurrentIndex, context.NamedIndexes, context.Record );
 
-					if( Context.ReaderConfiguration.IgnoreReadingExceptions )
+					if( context.ReaderConfiguration.IgnoreReadingExceptions )
 					{
-						Context.ReaderConfiguration.ReadingExceptionCallback?.Invoke( csvException, this );
+						context.ReaderConfiguration.ReadingExceptionCallback?.Invoke( csvException, this );
 					}
 					else
 					{
@@ -199,7 +204,7 @@ namespace CsvHelper
 
 			if( index >= context.Record.Length )
 			{
-				if( Context.ReaderConfiguration.WillThrowOnMissingField && Context.ReaderConfiguration.IgnoreBlankLines )
+				if( context.ReaderConfiguration.WillThrowOnMissingField && context.ReaderConfiguration.IgnoreBlankLines )
 				{
 					var ex = new CsvMissingFieldException( $"Field at index '{index}' does not exist." );
 					ExceptionHelper.AddExceptionData( ex, context.Row, null, index, context.NamedIndexes, context.Record );
@@ -211,7 +216,7 @@ namespace CsvHelper
 			}
 
 			var field = context.Record[index];
-			if( Context.ReaderConfiguration.TrimFields )
+			if( context.ReaderConfiguration.TrimFields )
 			{
 				field = field?.Trim();
 			}
@@ -320,8 +325,8 @@ namespace CsvHelper
 			context.ReusablePropertyMapData.TypeConverter = converter;
 			if( !context.TypeConverterOptionsCache.TryGetValue( type, out TypeConverterOptions typeConverterOptions ) )
 			{
-				typeConverterOptions = TypeConverterOptions.Merge( new TypeConverterOptions(), Context.ReaderConfiguration.TypeConverterOptionsFactory.GetOptions( type ) );
-				typeConverterOptions.CultureInfo = Context.ReaderConfiguration.CultureInfo;
+				typeConverterOptions = TypeConverterOptions.Merge( new TypeConverterOptions(), context.ReaderConfiguration.TypeConverterOptionsFactory.GetOptions( type ) );
+				typeConverterOptions.CultureInfo = context.ReaderConfiguration.CultureInfo;
 				context.TypeConverterOptionsCache.Add( type, typeConverterOptions );
 			}
 
@@ -423,7 +428,7 @@ namespace CsvHelper
 
 			if( index >= context.Record.Length || index < 0 )
 			{
-				if( Context.ReaderConfiguration.WillThrowOnMissingField )
+				if( context.ReaderConfiguration.WillThrowOnMissingField )
 				{
 					var ex = new CsvMissingFieldException( $"Field at index '{index}' does not exist." );
 					ExceptionHelper.AddExceptionData( ex, context.Row, typeof( T ), index, context.NamedIndexes, context.Record );
@@ -852,7 +857,7 @@ namespace CsvHelper
 		{
 			CheckHasBeenRead();
 
-			if( context.HeaderRecord == null && Context.ReaderConfiguration.HasHeaderRecord )
+			if( context.HeaderRecord == null && context.ReaderConfiguration.HasHeaderRecord )
 			{
 				ReadHeader();
 
@@ -887,7 +892,7 @@ namespace CsvHelper
 		{
 			CheckHasBeenRead();
 
-			if( context.HeaderRecord == null && Context.ReaderConfiguration.HasHeaderRecord )
+			if( context.HeaderRecord == null && context.ReaderConfiguration.HasHeaderRecord )
 			{
 				ReadHeader();
 
@@ -925,7 +930,7 @@ namespace CsvHelper
 			// Don't need to check if it's been read
 			// since we're doing the reading ourselves.
 
-			if( Context.ReaderConfiguration.HasHeaderRecord && context.HeaderRecord == null )
+			if( context.ReaderConfiguration.HasHeaderRecord && context.HeaderRecord == null )
 			{
 				if( !Read() )
 				{
@@ -947,9 +952,9 @@ namespace CsvHelper
 					var csvHelperException = ex as CsvHelperException ?? new CsvReaderException( "An unexpected error occurred.", ex );
 					ExceptionHelper.AddExceptionData( csvHelperException, context.Row, typeof( T ), context.CurrentIndex, context.NamedIndexes, context.Record );
 
-					if( Context.ReaderConfiguration.IgnoreReadingExceptions )
+					if( context.ReaderConfiguration.IgnoreReadingExceptions )
 					{
-						Context.ReaderConfiguration.ReadingExceptionCallback?.Invoke( csvHelperException, this );
+						context.ReaderConfiguration.ReadingExceptionCallback?.Invoke( csvHelperException, this );
 
 						continue;
 					}
@@ -973,7 +978,7 @@ namespace CsvHelper
 			// Don't need to check if it's been read
 			// since we're doing the reading ourselves.
 
-			if( Context.ReaderConfiguration.HasHeaderRecord && context.HeaderRecord == null )
+			if( context.ReaderConfiguration.HasHeaderRecord && context.HeaderRecord == null )
 			{
 				if( !Read() )
 				{
@@ -995,9 +1000,9 @@ namespace CsvHelper
 					var csvHelperException = ex as CsvHelperException ?? new CsvReaderException( "An unexpected error occurred.", ex );
 					ExceptionHelper.AddExceptionData( csvHelperException, context.Row, type, context.CurrentIndex, context.NamedIndexes, context.Record );
 
-					if( Context.ReaderConfiguration.IgnoreReadingExceptions )
+					if( context.ReaderConfiguration.IgnoreReadingExceptions )
 					{
-						Context.ReaderConfiguration.ReadingExceptionCallback?.Invoke( csvHelperException, this );
+						context.ReaderConfiguration.ReadingExceptionCallback?.Invoke( csvHelperException, this );
 
 						continue;
 					}
@@ -1015,7 +1020,7 @@ namespace CsvHelper
 		/// <filterpriority>2</filterpriority>
 		public void Dispose()
 		{
-			Dispose( !Context.LeaveOpen );
+			Dispose( !context.LeaveOpen );
 			GC.SuppressFinalize( this );
 		}
 
@@ -1121,7 +1126,7 @@ namespace CsvHelper
 				throw new ArgumentNullException( nameof( names ) );
 			}
 
-			if( !Context.ReaderConfiguration.HasHeaderRecord )
+			if( !context.ReaderConfiguration.HasHeaderRecord )
 			{
 				throw new CsvReaderException( "There is no header record to determine the index by name." );
 			}
@@ -1137,10 +1142,10 @@ namespace CsvHelper
 			string name = null;
 			foreach( var pair in context.NamedIndexes )
 			{
-				var propertyName = Context.ReaderConfiguration.PrepareHeaderForMatch( pair.Key );
+				var propertyName = context.ReaderConfiguration.PrepareHeaderForMatch( pair.Key );
 				foreach( var n in names )
 				{
-					var fieldName = Context.ReaderConfiguration.PrepareHeaderForMatch( n );
+					var fieldName = context.ReaderConfiguration.PrepareHeaderForMatch( n );
 					if( Configuration.CultureInfo.CompareInfo.Compare( propertyName, fieldName, CompareOptions.None ) == 0 )
 					{
 						name = pair.Key;
@@ -1150,7 +1155,7 @@ namespace CsvHelper
 
 			if( name == null || index >= context.NamedIndexes[name].Count )
 			{
-				if( Context.ReaderConfiguration.WillThrowOnMissingField && !isTryGet )
+				if( context.ReaderConfiguration.WillThrowOnMissingField && !isTryGet )
 				{
 					// If we're in strict reading mode and the
 					// named index isn't found, throw an exception.
@@ -1204,9 +1209,9 @@ namespace CsvHelper
 				return false;
 			}
 
-			return Context.ReaderConfiguration.ShouldSkipRecord != null
-				? Context.ReaderConfiguration.ShouldSkipRecord( context.Record ) || ( Context.ReaderConfiguration.SkipEmptyRecords && IsRecordEmpty( false ) )
-				: Context.ReaderConfiguration.SkipEmptyRecords && IsRecordEmpty( false );
+			return context.ReaderConfiguration.ShouldSkipRecord != null
+				? context.ReaderConfiguration.ShouldSkipRecord( context.Record ) || ( context.ReaderConfiguration.SkipEmptyRecords && IsRecordEmpty( false ) )
+				: context.ReaderConfiguration.SkipEmptyRecords && IsRecordEmpty( false );
 		}
 
 		/// <summary>
@@ -1295,9 +1300,9 @@ namespace CsvHelper
 				return;
 			}
 
-			if( Context.ReaderConfiguration.Maps[recordType] == null )
+			if( context.ReaderConfiguration.Maps[recordType] == null )
 			{
-				Context.ReaderConfiguration.Maps.Add( Context.ReaderConfiguration.AutoMap( recordType ) );
+				context.ReaderConfiguration.Maps.Add( context.ReaderConfiguration.AutoMap( recordType ) );
 			}
 
 			if( recordType.GetTypeInfo().IsPrimitive )
@@ -1318,7 +1323,7 @@ namespace CsvHelper
 		{
 			var bindings = new List<MemberBinding>();
 
-			CreatePropertyBindingsForMapping( Context.ReaderConfiguration.Maps[recordType], recordType, bindings );
+			CreatePropertyBindingsForMapping( context.ReaderConfiguration.Maps[recordType], recordType, bindings );
 
 			if( bindings.Count == 0 )
 			{
@@ -1326,7 +1331,7 @@ namespace CsvHelper
 			}
 
 			Expression body;
-			var constructorExpression = Context.ReaderConfiguration.Maps[recordType].Constructor;
+			var constructorExpression = context.ReaderConfiguration.Maps[recordType].Constructor;
 			if( constructorExpression is NewExpression )
 			{
 				body = Expression.MemberInit( (NewExpression)constructorExpression, bindings );
@@ -1361,8 +1366,8 @@ namespace CsvHelper
 				Index = 0,
 				TypeConverter = TypeConverterFactory.GetConverter( recordType )
 			};
-			propertyMapData.TypeConverterOptions = TypeConverterOptions.Merge( new TypeConverterOptions(), Context.ReaderConfiguration.TypeConverterOptionsFactory.GetOptions( recordType ) );
-			propertyMapData.TypeConverterOptions.CultureInfo = Context.ReaderConfiguration.CultureInfo;
+			propertyMapData.TypeConverterOptions = TypeConverterOptions.Merge( new TypeConverterOptions(), context.ReaderConfiguration.TypeConverterOptionsFactory.GetOptions( recordType ) );
+			propertyMapData.TypeConverterOptions.CultureInfo = context.ReaderConfiguration.CultureInfo;
 
 			fieldExpression = Expression.Call( Expression.Constant( propertyMapData.TypeConverter ), "ConvertFromString", null, fieldExpression, Expression.Constant( this ), Expression.Constant( propertyMapData ) );
 			fieldExpression = Expression.Convert( fieldExpression, recordType );
@@ -1443,7 +1448,7 @@ namespace CsvHelper
 				}
 
 				int index;
-				if( propertyMap.Data.IsNameSet || Context.ReaderConfiguration.HasHeaderRecord && !propertyMap.Data.IsIndexSet )
+				if( propertyMap.Data.IsNameSet || context.ReaderConfiguration.HasHeaderRecord && !propertyMap.Data.IsIndexSet )
 				{
 					// Use the name.
 					index = GetFieldIndex( propertyMap.Data.Names.ToArray(), propertyMap.Data.NameIndex );
@@ -1465,8 +1470,8 @@ namespace CsvHelper
 
 				// Convert the field.
 				var typeConverterExpression = Expression.Constant( propertyMap.Data.TypeConverter );
-				propertyMap.Data.TypeConverterOptions = TypeConverterOptions.Merge( new TypeConverterOptions(), Context.ReaderConfiguration.TypeConverterOptionsFactory.GetOptions( propertyMap.Data.Member.MemberType() ), propertyMap.Data.TypeConverterOptions );
-				propertyMap.Data.TypeConverterOptions.CultureInfo = Context.ReaderConfiguration.CultureInfo;
+				propertyMap.Data.TypeConverterOptions = TypeConverterOptions.Merge( new TypeConverterOptions(), context.ReaderConfiguration.TypeConverterOptionsFactory.GetOptions( propertyMap.Data.Member.MemberType() ), propertyMap.Data.TypeConverterOptions );
+				propertyMap.Data.TypeConverterOptions.CultureInfo = context.ReaderConfiguration.CultureInfo;
 
 				// Create type converter expression.
 				Expression typeConverterFieldExpression = Expression.Call( typeConverterExpression, nameof( ITypeConverter.ConvertFromString ), null, fieldExpression, Expression.Constant( this ), Expression.Constant( propertyMap.Data ) );
@@ -1529,7 +1534,7 @@ namespace CsvHelper
 				cantRead = cantRead ||
 				// Properties that don't have a public setter
 				// and we are honoring the accessor modifier.
-				property.GetSetMethod() == null && !Context.ReaderConfiguration.IncludePrivateMembers ||
+				property.GetSetMethod() == null && !context.ReaderConfiguration.IncludePrivateMembers ||
 				// Properties that don't have a setter at all.
 				property.GetSetMethod( true ) == null;
 			}
@@ -1553,7 +1558,7 @@ namespace CsvHelper
 				cantRead =
 					// Properties that don't have a public setter
 					// and we are honoring the accessor modifier.
-					property.GetSetMethod() == null && !Context.ReaderConfiguration.IncludePrivateMembers ||
+					property.GetSetMethod() == null && !context.ReaderConfiguration.IncludePrivateMembers ||
 					// Properties that don't have a setter at all.
 					property.GetSetMethod( true ) == null;
 			}

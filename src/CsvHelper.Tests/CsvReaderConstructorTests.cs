@@ -54,7 +54,7 @@ namespace CsvHelper.Tests
 		{
 			private ReadingContext context;
 
-			public ReadingContext Context => context;
+			public IParserContext Context => context;
 
 			public void Dispose()
 			{
@@ -89,6 +89,14 @@ namespace CsvHelper.Tests
 			public int Row
 			{
 				get { throw new NotImplementedException(); }
+			}
+
+			public FieldReader FieldReader
+			{
+				get
+				{
+					throw new NotImplementedException();
+				}
 			}
 		}
 	}
