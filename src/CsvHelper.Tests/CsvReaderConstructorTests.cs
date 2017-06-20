@@ -91,7 +91,7 @@ namespace CsvHelper.Tests
 				get { throw new NotImplementedException(); }
 			}
 
-			public FieldReader FieldReader
+			public IFieldReader FieldReader
 			{
 				get
 				{

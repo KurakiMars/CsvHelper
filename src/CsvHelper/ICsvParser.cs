@@ -26,7 +26,7 @@ namespace CsvHelper
 		/// <summary>
 		/// Gets the <see cref="FieldReader"/>.
 		/// </summary>
-		FieldReader FieldReader { get; }
+		IFieldReader FieldReader { get; }
 
 		/// <summary>
 		/// Reads a record from the CSV file.

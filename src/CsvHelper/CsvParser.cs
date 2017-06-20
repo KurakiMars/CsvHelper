@@ -17,7 +17,7 @@ namespace CsvHelper
 	public class CsvParser : ICsvParser
 	{
 		private ReadingContext context;
-		private FieldReader fieldReader;
+		private IFieldReader fieldReader;
 		private bool disposed;
 
 		/// <summary>
@@ -33,7 +33,7 @@ namespace CsvHelper
 		/// <summary>
 		/// Gets the <see cref="FieldReader"/>.
 		/// </summary>
-		public virtual FieldReader FieldReader => fieldReader;
+		public virtual IFieldReader FieldReader => fieldReader;
 
 		/// <summary>
 		/// Creates a new parser using the given <see cref="TextReader" />.
@@ -67,7 +67,7 @@ namespace CsvHelper
 		/// Creates a new parser using the given <see cref="FieldReader"/>.
 		/// </summary>
 		/// <param name="reader">The field reader.</param>
-		public CsvParser( FieldReader reader )
+		public CsvParser( IFieldReader reader )
 		{
 			fieldReader = reader ?? throw new ArgumentNullException( nameof( reader ) );
 			if( !( fieldReader.Context is IParserContext ) )
@@ -86,7 +86,7 @@ namespace CsvHelper
 		{
 			try
 			{
-				fieldReader.ClearRawRecord();
+				context.ClearCache( Caches.RawRecord );
 
 				var row = ReadLine();
 

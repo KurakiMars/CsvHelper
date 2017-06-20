@@ -20,7 +20,7 @@ namespace CsvHelper.Tests.Mocks
 
 		public ICsvParserConfiguration Configuration { get; }
 
-		public FieldReader FieldReader
+		public IFieldReader FieldReader
 		{
 			get
 			{

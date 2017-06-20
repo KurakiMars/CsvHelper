@@ -31,6 +31,11 @@ namespace CsvHelper
 		/// <summary>
 		/// Type converter options.
 		/// </summary>
-		TypeConverterOptions = 8
+		TypeConverterOptions = 8,
+
+		/// <summary>
+		/// Raw record.
+		/// </summary>
+		RawRecord = 16
     }
 }

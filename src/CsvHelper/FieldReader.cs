@@ -13,7 +13,7 @@ namespace CsvHelper
 	/// <summary>
 	/// Reads fields from a <see cref="TextReader"/>.
 	/// </summary>
-	public class FieldReader : IDisposable
+	public class FieldReader : IFieldReader
 	{
 		private ReadingContext context;
 		private bool disposed;
@@ -47,7 +47,6 @@ namespace CsvHelper
 		/// <summary>
 		/// Gets the next char as an <see cref="int"/>.
 		/// </summary>
-		/// <returns></returns>
 		public virtual int GetChar()
 		{
 			if( context.BufferPosition >= context.CharsRead )
@@ -179,14 +178,6 @@ namespace CsvHelper
 			{
 				context.RawRecordEndPosition = position;
 			}
-		}
-
-		/// <summary>
-		/// Clears the raw record.
-		/// </summary>
-		public virtual void ClearRawRecord()
-		{
-			context.RawRecordBuilder.Clear();
 		}
 
 		/// <summary>

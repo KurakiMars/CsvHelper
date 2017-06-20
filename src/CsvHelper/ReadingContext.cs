@@ -188,6 +188,11 @@ namespace CsvHelper
 			{
 				TypeConverterOptionsCache.Clear();
 			}
+
+			if( cache.HasFlag( Caches.RawRecord ) )
+			{
+				RawRecordBuilder.Clear();
+			}
 		}
 
 		/// <summary>
