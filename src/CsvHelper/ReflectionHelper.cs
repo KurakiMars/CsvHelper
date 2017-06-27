@@ -39,6 +39,11 @@ namespace CsvHelper
 		/// <returns>A new instance of the specified type.</returns>
 		public static object CreateInstance( Type type, params object[] args )
 		{
+			return ContractResolver.Current.CreateObject( type, args );
+		}
+
+		public static object CreateInstanceWithoutContractResolver( Type type, params object[] args )
+		{
 			Dictionary<string, Delegate> funcCache;
 			lock( locker )
 			{
