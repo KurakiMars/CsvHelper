@@ -1,4 +1,8 @@
-﻿using CsvHelper.Configuration;
+﻿// Copyright 2009-2017 Josh Close and Contributors
+// This file is a part of CsvHelper and is dual licensed under MS-PL and Apache 2.0.
+// See LICENSE.txt for details or visit http://www.opensource.org/licenses/ms-pl.html for MS-PL and http://opensource.org/licenses/Apache-2.0 for Apache 2.0.
+// https://github.com/JoshClose/CsvHelper
+using CsvHelper.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -10,12 +14,12 @@ using System.Threading.Tasks;
 namespace CsvHelper.Tests
 {
 	[TestClass]
-	public class ContractResolverTests
+	public class ObjectResolverTests
 	{
 		[TestCleanup]
 		public void Cleanup()
 		{
-			ContractResolver.Current = new ContractResolver( type => true, ReflectionHelper.CreateInstanceWithoutContractResolver );
+			ObjectResolver.Current = new ObjectResolver( type => true, ReflectionHelper.CreateInstanceWithoutContractResolver );
 		}
 
 		[TestMethod]
@@ -31,7 +35,7 @@ namespace CsvHelper.Tests
 				writer.Flush();
 				stream.Position = 0;
 
-				ContractResolver.Current = new TestContractResolver();
+				ObjectResolver.Current = new TestContractResolver();
 
 				csv.Configuration.RegisterClassMap<AMap>();
 				var records = csv.GetRecords<IA>().ToList();
@@ -51,7 +55,7 @@ namespace CsvHelper.Tests
 				writer.Flush();
 				stream.Position = 0;
 
-				ContractResolver.Current = new TestContractResolver();
+				ObjectResolver.Current = new TestContractResolver();
 
 				csv.Configuration.RegisterClassMap<ASubPropertyMap>();
 				var records = csv.GetRecords<IA>().ToList();
@@ -71,19 +75,21 @@ namespace CsvHelper.Tests
 				writer.Flush();
 				stream.Position = 0;
 
-				ContractResolver.Current = new TestContractResolver();
+				ObjectResolver.Current = new TestContractResolver();
 
 				var records = csv.GetRecords<IA>().ToList();
 			}
 		}
 
-		private class TestContractResolver : IContractResolver
+		private class TestContractResolver : IObjectResolver
 		{
-			public Func<Type, bool> CanCreate { get; set; }
+			public Func<Type, bool> CanResolve { get; set; }
 
-			public Func<Type, object[], object> Create { get; set; }
+			public Func<Type, object[], object> ResolveFunction { get; set; }
 
-			public object CreateObject( Type type, object[] constructorArgs = null )
+			public bool WillFallback { get; set; }
+
+			public object Resolve( Type type, object[] constructorArgs = null )
 			{
 				if( type == typeof( IA ) )
 				{
