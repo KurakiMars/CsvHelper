@@ -12,7 +12,7 @@ namespace CsvHelper
 	public class ObjectResolver : IObjectResolver
 	{
 		private static readonly object locker = new object();
-		private static IObjectResolver current = new ObjectResolver( type => true, ReflectionHelper.CreateInstanceWithoutContractResolver );
+		private static IObjectResolver current = new ObjectResolver();
 
 		/// <summary>
 		/// A value indicating if the resolver's <see cref="CanResolve"/>
@@ -23,9 +23,9 @@ namespace CsvHelper
 		public bool UseFallback { get; private set; }
 
 		/// <summary>
-		/// A value indicating if the resolver is able to resolve
-		/// the given type. True if the type can be resolved,
-		/// otherwise false.
+		/// A function that returns a value indicating if the resolver 
+		/// is able to resolve the given type. True if the type can be 
+		/// resolved, otherwise false.
 		/// </summary>
 		public Func<Type, bool> CanResolve { get; private set; }
 
@@ -43,9 +43,14 @@ namespace CsvHelper
 		/// Creates an instance of the object resolver using the given can create function
 		/// and creat function.
 		/// </summary>
-		/// <param name="canResolve"></param>
-		/// <param name="resolveFunction"></param>
-		/// <param name="useFallback"></param>
+		/// <param name="canResolve">A function that returns a value indicating if the resolver 
+		/// is able to resolve the given type. True if the type can be 
+		/// resolved, otherwise false.</param>
+		/// <param name="resolveFunction">The function that creates an object from a given type.</param>
+		/// <param name="useFallback">A value indicating if the resolver's <see cref="CanResolve"/>
+		/// returns false that an object will still be created using
+		/// CsvHelper's object creation. True to fallback, otherwise false.
+		/// Default value is true.</param>
 		public ObjectResolver( Func<Type, bool> canResolve, Func<Type, object[], object> resolveFunction, bool useFallback = true )
 		{
 			CanResolve = canResolve ?? throw new ArgumentNullException( nameof( canResolve ) );
