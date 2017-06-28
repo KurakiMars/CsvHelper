@@ -18,7 +18,7 @@ namespace CsvHelper
 		/// CsvHelper's object creation. True to fallback, otherwise false.
 		/// Default value is true.
 		/// </summary>
-		bool WillFallback { get; }
+		bool UseFallback { get; }
 
 		/// <summary>
 		/// A value indicating if the resolver is able to resolve
@@ -35,7 +35,7 @@ namespace CsvHelper
 		/// <summary>
 		/// Creates an object from the given type using the <see cref="ResolveFunction"/>
 		/// function. If <see cref="CanResolve"/> is false, the object will be
-		/// created using CsvHelper's default object creation. If <see cref="WillFallback"/>
+		/// created using CsvHelper's default object creation. If <see cref="UseFallback"/>
 		/// is false, an exception is thrown.
 		/// </summary>
 		/// <param name="type">The type to create an instance from. The created object

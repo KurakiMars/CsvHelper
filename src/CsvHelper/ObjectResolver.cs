@@ -20,7 +20,7 @@ namespace CsvHelper
 		/// CsvHelper's object creation. True to fallback, otherwise false.
 		/// Default value is true.
 		/// </summary>
-		public bool WillFallback { get; private set; }
+		public bool UseFallback { get; private set; }
 
 		/// <summary>
 		/// A value indicating if the resolver is able to resolve
@@ -45,18 +45,18 @@ namespace CsvHelper
 		/// </summary>
 		/// <param name="canResolve"></param>
 		/// <param name="resolveFunction"></param>
-		/// <param name="willFallback"></param>
-		public ObjectResolver( Func<Type, bool> canResolve, Func<Type, object[], object> resolveFunction, bool willFallback = true )
+		/// <param name="useFallback"></param>
+		public ObjectResolver( Func<Type, bool> canResolve, Func<Type, object[], object> resolveFunction, bool useFallback = true )
 		{
 			CanResolve = canResolve ?? throw new ArgumentNullException( nameof( canResolve ) );
 			ResolveFunction = resolveFunction ?? throw new ArgumentNullException( nameof( resolveFunction ) );
-			WillFallback = willFallback;
+			UseFallback = useFallback;
 		}
 
 		/// <summary>
 		/// Creates an object from the given type using the <see cref="ResolveFunction"/>
 		/// function. If <see cref="CanResolve"/> is false, the object will be
-		/// created using CsvHelper's default object creation. If <see cref="WillFallback"/>
+		/// created using CsvHelper's default object creation. If <see cref="UseFallback"/>
 		/// is false, an exception is thrown.
 		/// </summary>
 		/// <param name="type">The type to create an instance from. The created object
@@ -69,7 +69,7 @@ namespace CsvHelper
 				return ResolveFunction( type, constructorArgs );
 			}
 
-			if( WillFallback )
+			if( UseFallback )
 			{
 				return ReflectionHelper.CreateInstance( type, constructorArgs );
 			}

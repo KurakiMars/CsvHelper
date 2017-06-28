@@ -87,7 +87,7 @@ namespace CsvHelper.Tests
 
 			public Func<Type, object[], object> ResolveFunction { get; set; }
 
-			public bool WillFallback { get; set; }
+			public bool UseFallback { get; set; }
 
 			public object Resolve( Type type, object[] constructorArgs = null )
 			{
